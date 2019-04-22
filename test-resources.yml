@@ -1,0 +1,39 @@
+## http://docs.pivotal.io/platform-automation/v2.1/
+## https://github.com/myminseok/platform-automation-pipelines
+## fly -t demo sp -p test -c test.yml test-params.yml
+resources:
+- name: platform-automation-tasks-s3
+  type: s3
+  source:
+    endpoint: ((endpoint))
+    access_key_id: ((access_key_id))
+    secret_access_key: ((secret_access_key))
+    region_name: ((region))
+    bucket: ((bucket))
+    regexp: platform-automation-tasks-(.*).zip
+    skip_ssl_verification: true
+
+- name: platform-automation-image-s3
+  type: s3
+  source:
+    endpoint: ((endpoint))
+    access_key_id: ((access_key_id))
+    secret_access_key: ((secret_access_key))
+    region_name: ((region))
+    bucket: ((bucket))
+    regexp: platform-automation-image-(.*).tgz
+    skip_ssl_verification: true
+
+jobs:
+- name: test-resources
+  plan:
+  - aggregate:
+    - get: platform-automation-tasks-s3
+      params:
+        unpack: true
+    - get: platform-automation-image-s3
+      params:
+        unpack: true
+  - task: test-resources
+    image: platform-automation-image-s3
+    file: platform-automation-tasks-s3/tasks/test.yml

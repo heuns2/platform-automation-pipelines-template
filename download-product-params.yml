@@ -1,0 +1,35 @@
+
+foundation: dev-1
+
+s3:
+  endpoint: https://s3.pcfdemo.net
+  access_key_id: ((s3_access_key_id))
+  secret_access_key: ((s3_secret_access_key))
+  region_name: ""
+  buckets:
+    platform_automation: platform-automation
+    foundation: dev-1
+    pivnet_products: pivnet-products
+
+git:
+  platform_automation_tasks:
+    uri: pivotal@git.pcfdemo.net/platform/platform_automation_tasks.git
+  configuration:
+    uri: pivotal@git.pcfdemo.net:platform/platform-conf.git
+  variable:
+    uri: pivotal@1git.pcfdemo.net:platform/platform-conf.git
+  user: 
+    email: ((git_user_email))
+    username: ((git_user_username))
+  private_key: ((git_private_key.private_key))
+
+credhub:
+  server: https://concourse.pcfdemo.net:8844
+  ca_cert: ((credhub_ca_cert.certificate))
+  client: ((credhub_client.username))
+  secret: ((credhub_client.password))
+  interpolate_folders: dev-1/download-product-configs
+
+
+pivnet: 
+  token: ((pivnet_token))
